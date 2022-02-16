@@ -1,0 +1,25 @@
+# Ingress
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: "internal-{{ include "test.ingress" . }}"
+  namespace: {{ include "test.namespace" . }}
+  annotations:
+    {{ include "test.ingress.annotations" . | nindent 8 }}
+  labels:
+    app:  {{ include "test.name" . }}
+    ingress: internal-{{ include "test.ingress" . }}
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: ssl-redirect
+              servicePort: use-annotation
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: {{ include "test.service" . }}
+              servicePort: {{ .Values.webAppContainerPort }}

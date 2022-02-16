@@ -1,0 +1,79 @@
+# Default values for bre.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+environment: test
+
+image:
+  repository: rejacob/test-project
+  tag: latest
+  pullPolicy: Always
+
+webAppContainerPort: 80
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+rollingUpdate:
+  maxSurge: 25%
+  maxUnavailable: 25%
+
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: NodePort
+
+ingress:
+  enabled: true
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  requests:
+    cpu: 300m
+    memory: 500Mi
+  limits:
+    cpu: 800m
+    memory: 1000Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# AWS Resources
+awsACMArn: arn:aws:acm:ap-southeast-1:937349207147:certificate/87a4ddf9-e6a4-47ce-8071-1c97d2fb435a
+awsSGALB: sg-0cb2791e3aaab321d
+
+
+timestamp: 0
+
+hpa:
+  enabled: true
+  max: 4
+  cpuUtilPercent: 70
+  memUtilPercent: 70

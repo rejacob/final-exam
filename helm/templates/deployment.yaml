@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{ include "test.deploymentLabels" . | nindent 6 }}
+  name: {{ include "test.deploymentName" . }}
+  namespace: {{ include "test.namespace" . }}
+spec:
+  progressDeadlineSeconds: {{ .Values.spec.progressDeadlineSeconds }} # Number of seconds kubernetes check if new pods is stalled
+  replicas: {{ .Values.spec.replicas }} # Number of pods will be deployed
+  revisionHistoryLimit: {{ .Values.spec.revisionHistoryLimit }} # Number of previous deployment config will be stored. It is use for rollback
+  selector: # Select with pods will be manage
+    matchLabels: # selector use labels to determined with pods to manage
+      {{- include "test.deploymentPods.labels" . | nindent 6 }}
+  strategy: # Strategy for rolling out
+    rollingUpdate:
+      maxSurge: {{ .Values.rollingUpdate.maxSurge }} # increase percentage from desired capacity for new containers
+      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }} # decrease percentage from desired capacity for old containers
+    type: RollingUpdate
+  template: # pods template
+    metadata: # metadata for pods
+      labels: 
+        {{- include "test.deploymentPods.labels" . | nindent 8 }}
+      annotations:
+        timestamp: "{{ .Values.timestamp }}"
+    spec:
+      serviceAccountName: {{ include "test.serviceaccount" . }}
+      containers:
+      - image: "{{- .Values.image.repository -}}:{{- .Values.image.tag -}}" # repository & container image 
+        imagePullPolicy: {{ .Values.image.pullPolicy }} # how image being pull to repository
+        name: {{ include "test.containerName" . }}
+        ports:
+        - containerPort: {{ .Values.webAppContainerPort }} # expose port from the container
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      dnsPolicy: ClusterFirst # dnsPolicy, always ClusterFirst
+      restartPolicy: Always # Always restart the container if there's a unexpected shutdown/failure
+      schedulerName: default-scheduler # Use default scheduler in provisioning pods to feasible/available node.
+      securityContext: {}
+      imagePullSecrets:
+        - name: regcred
