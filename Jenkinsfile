@@ -20,7 +20,7 @@ pipeline {
 
         stage('Build Image'){
            steps {
-               scripts{
+               script {
                     BUILD_VERSION = "${releaseNumber}.${BUILD_NUMBER}"
                     sh "pwd"
                     sh "docker build --no-cache -t ${repoURL}:${BUILD_VERSION} ."  
