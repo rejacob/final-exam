@@ -23,14 +23,23 @@ pipeline {
                script {
                     BUILD_VERSION = "${releaseNumber}.${BUILD_NUMBER}"
                     sh "pwd"
-                    sh "docker build --no-cache -t ${repoURL}:${BUILD_VERSION} ."  
+                    sh "docker build --no-cache -t finalexam:${BUILD_VERSION} ."
                }  
            }
         }
 
         stage('Push to Dockerhub'){
             steps {
-                sh "docker tag  ${repoURL}:${BUILD_VERSION} ${repoURL}:latest"
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'REGISTRY_CREDENTIALS', passwordVariable: 'Dockerhub_Password', usernameVariable: 'Dockerhub_Username')]) {
+                        sh """
+
+                            docker login --username ${Dockerhub_Username} --password ${Dockerhub_Password}
+
+                        """
+                }
+                sh "docker tag  finalexam:${BUILD_VERSION} ${repoURL}:latest"
+                sh "docker tag  finalexam:${BUILD_VERSION} ${repoURL}:${BUILD_VERSION}"
                 sh "docker push ${repoURL}:${BUILD_VERSION}"
                 sh "docker push ${repoURL}:latest"
             }
