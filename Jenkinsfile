@@ -3,6 +3,7 @@ def buildStartTime = new Date().format('dd/MM/yyyy HH:mm:ss')
 def helmPath = "helm/"
 def repoURL = "rejacob/test-project"
 def releaseNumber = "1.0"
+def BUILD_VERSION = ""
 
 pipeline {
     agent {
