@@ -49,7 +49,6 @@ pipeline {
                             --values=${helmPath}values.yaml \
                             --set-string timestamp='${buildStartTime}' \
                             --set-string image.tag='${BUILD_VERSION}' \
-                            --set-string secret.registryCredentials='${REGISTRY_CREDENTIALS}' \
                             """
                 }
 
