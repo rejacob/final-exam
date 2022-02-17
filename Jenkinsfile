@@ -30,10 +30,8 @@ pipeline {
 
         stage('Push to Dockerhub'){
             steps {
-                script {
-                    sh 'echo $REGISTRY_CREDENTIALS_PSW | docker login -u $REGISTRY_CREDENTIALS_USR --password-stdin'
-                    }
-                }
+                sh 'echo $REGISTRY_CREDENTIALS_PSW | docker login -u $REGISTRY_CREDENTIALS_USR --password-stdin'
+                
                 sh "docker tag  finalexam ${repoURL}:latest"
                 sh "docker tag  finalexam ${repoURL}:${BUILD_VERSION}"
                 sh "docker push ${repoURL}:${BUILD_VERSION}"
