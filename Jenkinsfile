@@ -37,6 +37,7 @@ pipeline {
                             docker login --username ${Dockerhub_Username} --password ${Dockerhub_Password}
 
                         """
+                    }
                 }
                 sh "docker tag  finalexam:${BUILD_VERSION} ${repoURL}:latest"
                 sh "docker tag  finalexam:${BUILD_VERSION} ${repoURL}:${BUILD_VERSION}"
