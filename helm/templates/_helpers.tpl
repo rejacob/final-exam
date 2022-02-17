@@ -3,15 +3,15 @@
 Expand the name of the chart.
 */}}
 {{- define "test.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}-{{ .Values.environment }}
+{{- .Chart.Name | trim -}}-{{ .Values.environment }}
 {{- end -}}
 
 {{- define "test.namespace" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 4 | trimSuffix "-" -}}-{{ .Values.environment }}
+{{- .Chart.Name | trim -}}-{{ .Values.environment }}
 {{- end -}}
 
 {{- define "test.containerName" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 4 | trimSuffix "-" -}}-{{ .Values.environment }}
+{{- .Chart.Name | trim -}}-{{ .Values.environment }}
 {{- end -}}
 
 {{- define "test.deploymentName" -}}
