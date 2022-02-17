@@ -23,7 +23,7 @@ pipeline {
                script {
                     BUILD_VERSION = "${releaseNumber}.${BUILD_NUMBER}"
                     sh "pwd"
-                    sh "docker build --no-cache -t finalexam:${BUILD_VERSION} ."
+                    sh "docker build --no-cache -t finalexam ."
                }  
            }
         }
@@ -39,8 +39,8 @@ pipeline {
                         """
                     }
                 }
-                sh "docker tag  finalexam:${BUILD_VERSION} ${repoURL}:latest"
-                sh "docker tag  finalexam:${BUILD_VERSION} ${repoURL}:${BUILD_VERSION}"
+                sh "docker tag  finalexam ${repoURL}:latest"
+                sh "docker tag  finalexam ${repoURL}:${BUILD_VERSION}"
                 sh "docker push ${repoURL}:${BUILD_VERSION}"
                 sh "docker push ${repoURL}:latest"
             }
