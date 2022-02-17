@@ -31,7 +31,7 @@ pipeline {
         stage('Push to Dockerhub'){
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'REGISTRY_CREDENTIALS', passwordVariable: 'Dockerhub_Password', usernameVariable: 'Dockerhub_Username')]) {
+                    withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'Dockerhub_Password', usernameVariable: 'Dockerhub_Username')]) {
                         sh """
 
                             docker login --username ${Dockerhub_Username} --password ${Dockerhub_Password}
