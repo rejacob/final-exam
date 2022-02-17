@@ -6,7 +6,7 @@ def releaseNumber = "1.0"
 
 pipeline {
     agent {
-        any
+        none
     }
 
     environment {
