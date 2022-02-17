@@ -31,12 +31,7 @@ pipeline {
         stage('Push to Dockerhub'){
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'Dockerhub_Password', usernameVariable: 'Dockerhub_Username')]) {
-                        sh """
-
-                            docker login --username ${Dockerhub_Username} --password ${Dockerhub_Password} hub.docker.com
-
-                        """
+                    sh 'echo $REGISTRY_CREDENTIALS_PSW | docker login -u $REGISTRY_CREDENTIALS_USR --password-stdin'
                     }
                 }
                 sh "docker tag  finalexam ${repoURL}:latest"
